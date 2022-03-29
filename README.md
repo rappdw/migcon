@@ -1,12 +1,11 @@
-[![PyPi](https://img.shields.io/pypi/v/con2sphx.svg)](https://pypi.org/project/con2sphx/) 
-[![PyPi](https://img.shields.io/pypi/wheel/con2sphx.svg)](https://pypi.org/project/fs-con2sphx/) 
+[![PyPi](https://img.shields.io/pypi/v/migcon.svg)](https://pypi.org/project/migcon/) 
+[![PyPi](https://img.shields.io/pypi/wheel/migcon.svg)](https://pypi.org/project/migcon/) 
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/) 
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/) 
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) 
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/) 
-[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/) 
 
-# Convert Confluence to Jupyter Book
+# Migcon: Migrate Confluence Export to Jupyter Book
 
 This utility assists in converting Confluence content to a Jupyter Book project. Specifically, once you have a
 Confluence HTML export that has been [converted to Markdown](https://github.com/meridius/confluence-to-markdown),
