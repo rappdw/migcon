@@ -194,3 +194,46 @@ Documentation.json](attachments/443510468/443510478.json)
         for files in attachment.files.values():
             count += len(files)
     assert count == 10
+
+def test_div_fixups():
+    test_string = """
+<td class="confluenceTd"><div class="content-wrapper">
+<div class="content-wrapper">
+<p>NOT STARTED</p>
+</div>
+</div></td>
+"""
+    new = content_manager._fixup_divs(test_string)
+    assert new.find('<div class="content-wrapper">') == -1
+    # lines = test_string.split('\n')
+    # start = 0
+    # end = len(lines)
+    # idx = 0
+    # increment = 32
+    # print("")
+    #
+    # while True:
+    #     data = "\n".join(lines[start: end])
+    #     new = content_manager._fixup_divs(data)
+    #     print(f"iter: {idx} start: {start} end: {end}")
+    #     if new.find('content-wrapper') == -1:
+    #         print(f"success")
+    #         break
+    #     diff = end - start
+    #     start = start + diff//increment
+    #     end = end - diff//increment
+    #     idx += 1
+    # start -= 1
+    # end += 1
+    # while True:
+    #     data = "\n".join(lines[start: end])
+    #     new = content_manager._fixup_divs(data)
+    #     print(f"iter: {idx} start: {start} end: {end}")
+    #     if new.find('content-wrapper') == -1:
+    #         print(f"success")
+    #         break
+    #     end -= 1
+    #     idx += 1
+    #
+    # print("\n".join(lines[start: end+10]))
+    #

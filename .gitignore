@@ -3,3 +3,6 @@
 .idea
 .vscode
 .pytest_cache
+build
+wheel
+

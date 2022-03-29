@@ -324,3 +324,32 @@ def fixup_attachment_references(tree: Node, attachments: Dict[Path, AttachmentIn
         if fixup.changed:
             with file.open(mode='w') as output_file:
                 output_file.write(new)
+
+
+def fixup_div_tags(tree: Node) -> None:
+    """
+    Fixup the div tags in the markdown files.
+    :param tree: the content root node
+    """
+    for node in PreOrderIter(tree):
+        file = get_dest_file_from_node(node)
+        with file.open(mode='r+') as input_file:
+            data = input_file.read()
+        new = _fixup_divs(data)
+        if new != data:
+            with file.open(mode='w') as output_file:
+                output_file.write(new)
+
+def _fixup_divs(content: str) -> str:
+    patterns = [
+        r'<div class="content-wrapper">\s*(.*?)\s*</div>',
+        r'<div class="content-wrapper">\s*(.*?)\s*</div>',
+        r'<div class="table-wrap">\s*(.*?)\s*</div>',
+        r'<div class="code panel.*?<div class="CodeContent.*?>\s*(.*?)\s*</div>\s*</div>',
+        r'<div>\s*(.*?)\s*</div>',
+        r'<div>\s*(.*?)\s*</div>',
+    ]
+    flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
+    for pattern in patterns:
+        content = re.sub(pattern, r'\1', content, 0, flags)
+    return content

@@ -2,7 +2,7 @@ import argparse
 
 from pathlib import Path
 from migcon.content_manager import copy_into_dir_tree, rewrite_links, process_attachments, remove_trailing_sections, \
-    fixup_attachment_references
+    fixup_attachment_references, fixup_div_tags
 from migcon.content_tree import build_content_tree, generate_replacement_dictionary
 from migcon.toc_generator import JupyterBookTOCGenerator
 
@@ -27,6 +27,7 @@ def main():
     # 6. Rewrite the links in the markdown files in the target directory
     # 7. Remove trailing sections of files (## Attachments, ## History, ## Comments)
     # 8. Fixup references to attachments (meaningful names, markdown imagee syntax, drawio directives, etc.)
+    # 9. Fixup superfluous <div> tags in the markdown files
 
     tree = build_content_tree(source, target)                           # 1.
     replacements = generate_replacement_dictionary(tree)                # 2.
@@ -36,6 +37,7 @@ def main():
     rewrite_links(tree, replacements)                                   # 6.
     remove_trailing_sections(tree)                                      # 7.
     fixup_attachment_references(tree, attachment_info, source, target)  # 8.
+    fixup_div_tags(tree)                                                # 9.
 
 
 if __name__ == "__main__":
