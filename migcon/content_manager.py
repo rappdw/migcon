@@ -348,8 +348,10 @@ def _fixup_divs(content: str) -> str:
         r'<div class="code panel.*?<div class="CodeContent.*?>\s*(.*?)\s*</div>\s*</div>',
         r'<div>\s*(.*?)\s*</div>',
         r'<div>\s*(.*?)\s*</div>',
+        r'<div class="details">\s*(.*?)\s*</div>',
     ]
     flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
     for pattern in patterns:
         content = re.sub(pattern, r'\1', content, 0, flags)
+    content = re.sub(r' ', ' ', content, flags)
     return content

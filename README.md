@@ -44,7 +44,7 @@ present in the Confluence page source, e.g. Comments, Attachment Lists, Change H
 2) Create a working directory and unzip the Confluence export into that directory (sub-dir html)
 3) Clone [Confluence to Markdown](https://github.com/meridius/confluence-to-markdown)
 4) From within the cloned directory run `npm run start <working-dir>/html <working-dir>/markdown`
-5) `pip install con2jb`
+5) `pip install migcon`
 6) Run con2jb to convert the exported markdown into a MyST, sphinx friendly markdown/dir structure
     `con2jb -i <working-dir>/markdown -o <working-dir>/sphinx`
 7) Copy the resultant jupyter book friendly markdown into the project of your choice

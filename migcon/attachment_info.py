@@ -77,6 +77,7 @@ def process_tokens(tokens: List[Token], page_name: str) -> AttachmentInfo:
                         soft_break = True
                     if att_url and att_name and att_type:
                         page_id = Path(att_url).parent.name
+                        att_name = att_name.replace(' ', '_')
                         if att_name in attachments:
                             if att_type in attachments[att_name].files:
                                 attachments[att_name].files[att_type].append(att_url)
