@@ -67,7 +67,7 @@ def _rewrite_links(file: Path, replacement_files: Dict[str, str]) -> None:
             if link_target in replacement_files:
                 self.changed = True
                 return f'](/{replacement_files[link_target]})'
-            return link_target
+            return f']({link_target})'
 
     with open(file, mode='r+') as input_file:
         data = input_file.read()
