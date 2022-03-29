@@ -353,5 +353,5 @@ def _fixup_divs(content: str) -> str:
     flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
     for pattern in patterns:
         content = re.sub(pattern, r'\1', content, 0, flags)
-    content = re.sub(r' ', ' ', content, flags)
+    content = content.replace(u'\xa0', ' ')
     return content
