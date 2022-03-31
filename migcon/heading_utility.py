@@ -22,18 +22,25 @@ def execute_replacement(source: Path, target: Path):
     with open(source, "r") as f:
         structure = json.load(f)
     for file, changes in structure.items():
+        target_file = target / file
+        if not target_file.exists():
+            print(f"Warning: {target_file} doesn't exist")
+            continue
         # read the file
-        with open(target / file, "r") as f:
+        with open(target_file, "r") as f:
             data = f.read()
         try:
             for change in changes:
                 old, new = change
-                data = data.replace(old, new)
+                if data.find(old) == -1:
+                    print(f"Warning: {old} not found in {file}. Content has changed, re-examine your change file")
+                else:
+                    data = data.replace(old, new)
         except ValueError as e:
-            print(f"Error: {e} on file: {target / file}")
+            print(f"Error: {e} on file: {target_file}")
 
         # write the file
-        with open(target / file, "w") as f:
+        with open(target_file, "w") as f:
             f.write(data)
 
 
