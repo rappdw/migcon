@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name=package,
-      version="1.0",
+      version="1.1.0",
       description='Utilities to migrate Confluence export to Sphinx, Juypter Book, etc.',
       long_description=long_description,
       long_description_content_type="text/markdown",
