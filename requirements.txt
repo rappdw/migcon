@@ -2,3 +2,4 @@ anytree
 markdown_it_py
 pyyaml
 pytest
+markdownify

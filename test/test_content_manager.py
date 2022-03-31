@@ -195,16 +195,6 @@ Documentation.json](attachments/443510468/443510478.json)
             count += len(files)
     assert count == 10
 
-def test_div_fixups():
-    test_string = """
-<td class="confluenceTd"><div class="content-wrapper">
-<div class="content-wrapper">
-<p>NOT STARTED</p>
-</div>
-</div></td>
-"""
-    new = content_manager._fixup_divs(test_string)
-    assert new.find('<div class="content-wrapper">') == -1
 
 def test_fixup_toc_macro():
     test_string = """
@@ -289,3 +279,182 @@ across the entire company.
     assert content.find('expander-') == -1
 
 
+def test_div_fixup():
+    test_string = """
+## General
+
+<div class="table-wrap">
+
+<table class="wrapped confluenceTable">
+<tbody>
+<tr class="odd">
+<th class="confluenceTh"><div class="content-wrapper">
+<p>Product</p>
+<div id="expander-638174472" class="expand-container">
+<div id="expander-control-638174472" class="expand-control">
+<img src="/images/icons/grey_arrow_down.png" class="expand-control-image"
+style="vertical-align:middle;" />Examples
+</div>
+<div id="expander-content-638174472" class="expand-content">
+<p>PPS, TAP, Archiving, Governance, etc.</p>
+</div>
+</div>
+<p><br />
+</p>
+<p><br />
+</p>
+</div></th>
+<td class="confluenceTd">Multiple Products</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><div class="content-wrapper">
+<p>Service Type</p>
+<div id="expander-1795523471" class="expand-container">
+<div id="expander-control-1795523471" class="expand-control">
+<img src="/images/icons/grey_arrow_down.png" class="expand-control-image"
+style="vertical-align:middle;" />Examples
+</div>
+<div id="expander-content-1795523471" class="expand-content">
+<p>Platform Java Service, Platform Rails Application, etc.</p>
+</div>
+</div>
+</div></th>
+<td class="confluenceTd"><p>Multiple AWS Services hosting primarily
+Python REST APIs.</p></td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Puppet Class</p></th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Service Record</p></th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Link to Build Job on Jenkins</p></th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh">Link to API Documentation</th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Source Repository (name of git
+repository)</p></th>
+<td class="confluenceTd"><p><a
+href="https://hq-stash.corp.proofpoint.com/projects/RESEROIAC/repos/inference-infrastructure/browse"
+rel="nofollow">Browse ReseroIAC / inference-infrastructure - HQ Stash
+Bitbucket (proofpoint.com)</a></p>
+<p><a
+href="https://hq-stash.corp.proofpoint.com/projects/RESEROIAC/repos/inference-service-modules/browse"
+rel="nofollow">Browse ReseroIAC / inference-service-modules - HQ Stash
+Bitbucket (proofpoint.com)</a></p></td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Engineering Team's Email Alias</p></th>
+<td class="confluenceTd">OG-mllabsengineering@proofpoint.com</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Product Owner</p></th>
+<td class="confluenceTd">Dan Rapp</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Operations Service Owner</p></th>
+<td class="confluenceTd"><br />
+</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh">Link to corresponding Resiliency Checklist</th>
+<td class="confluenceTd"><br />
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+"""
+    content = content_manager._fixup_divs(test_string)
+    assert content.find('<div') == -1
+    assert content.find('</div') == -1
+
+
+def test_convert_html():
+    test_string = """
+## General
+
+<table class="wrapped confluenceTable">
+<tbody>
+<tr class="odd">
+<th class="confluenceTh"><p>Product</p>
+
+```{dropdown} Examples
+<p>PPS, TAP, Archiving, Governance, etc.</p>
+```
+<p><br />
+</p>
+<p><br />
+</p>
+</th>
+<td class="confluenceTd">Multiple Products</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Service Type</p>
+
+```{dropdown} Examples
+<p>Platform Java Service, Platform Rails Application, etc.</p>
+```
+</th>
+<td class="confluenceTd"><p>Multiple AWS Services hosting primarily
+Python REST APIs.</p></td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Puppet Class</p></th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Service Record</p></th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Link to Build Job on Jenkins</p></th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh">Link to API Documentation</th>
+<td class="confluenceTd">N/A</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Source Repository (name of git
+repository)</p></th>
+<td class="confluenceTd"><p><a
+href="https://hq-stash.corp.proofpoint.com/projects/RESEROIAC/repos/inference-infrastructure/browse"
+rel="nofollow">Browse ReseroIAC / inference-infrastructure - HQ Stash
+Bitbucket (proofpoint.com)</a></p>
+<p><a
+href="https://hq-stash.corp.proofpoint.com/projects/RESEROIAC/repos/inference-service-modules/browse"
+rel="nofollow">Browse ReseroIAC / inference-service-modules - HQ Stash
+Bitbucket (proofpoint.com)</a></p></td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Engineering Team's Email Alias</p></th>
+<td class="confluenceTd">OG-mllabsengineering@proofpoint.com</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh"><p>Product Owner</p></th>
+<td class="confluenceTd">Dan Rapp</td>
+</tr>
+<tr class="even">
+<th class="confluenceTh"><p>Operations Service Owner</p></th>
+<td class="confluenceTd"><br />
+</td>
+</tr>
+<tr class="odd">
+<th class="confluenceTh">Link to corresponding Resiliency Checklist</th>
+<td class="confluenceTd"><br />
+</td>
+</tr>
+</tbody>
+</table>
+"""
+    content = content_manager._convert_remaining_html(test_string)
+    assert content.find('href') == -1

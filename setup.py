@@ -38,6 +38,7 @@ setup(name=package,
             'anytree>=2.8.0',
             'markdown_it_py>=1.1.0',
             'pyyaml>=6.0',
+            'markdwonify>=0.10.3',
       ],
       extras_require={
             'dev': [

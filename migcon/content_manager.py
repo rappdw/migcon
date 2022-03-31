@@ -4,6 +4,7 @@ import re
 import shutil
 
 from anytree import Node, PreOrderIter
+from markdownify import markdownify as md
 from migcon.attachment_info import AttachmentInfo, Attachment, process_tokens
 from migcon.drawio_handler import copy_drawio_file, handle_attachment
 from migcon.file_dups import find_duplicates
@@ -351,10 +352,10 @@ def _fixup_divs(content: str) -> str:
         r'<div class="details">\s*(.*?)\s*</div>',
     ]
     flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
-    for pattern in patterns:
-        content = re.sub(pattern, r'\1', content, 0, flags)
-    content = content.replace(u'\xa0', ' ')
     content = fixup_expander(content, flags)
+    for pattern in patterns:
+        content = re.sub(pattern, r'\1\n', content, 0, flags)
+    content = content.replace(u'\xa0', ' ')
     content = fixup_toc_macro(content, flags)
     content = fixup_multi_column(content, flags)
     return content
@@ -386,4 +387,38 @@ def fixup_multi_column(content, flags = re.DOTALL | re.MULTILINE | re.IGNORECASE
     ]
     for pattern in patterns:
         content = re.sub(pattern, r'\1', content, 0, flags)
+    return content
+
+def convert_remaining_html(tree: Node) -> None:
+    """
+    Fixup the div tags in the markdown files.
+    :param tree: the content root node
+    """
+    for node in PreOrderIter(tree):
+        file = get_dest_file_from_node(node)
+        with file.open(mode='r+') as input_file:
+            data = input_file.read()
+        new = _convert_remaining_html(data)
+        if new != data:
+            with file.open(mode='w') as output_file:
+                output_file.write(new)
+
+def _convert_remaining_html(content: str) -> str:
+    strip_newline = False
+    def _convert_to_md(match):
+        converted = md(match.group(1))
+        if strip_newline:
+            converted = converted.replace('\n', '')
+        return converted
+
+    flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
+
+    strip_newline = True
+    html_link = r'(<a\s*?href.*?</a>)'
+    content = re.sub(html_link, _convert_to_md, content, 0, flags)
+
+    strip_newline = False
+    html_table = r'(<table.*?</table>)'
+    content = re.sub(html_table, _convert_to_md, content, 0, flags)
+
     return content
