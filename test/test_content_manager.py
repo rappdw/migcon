@@ -205,35 +205,87 @@ def test_div_fixups():
 """
     new = content_manager._fixup_divs(test_string)
     assert new.find('<div class="content-wrapper">') == -1
-    # lines = test_string.split('\n')
-    # start = 0
-    # end = len(lines)
-    # idx = 0
-    # increment = 32
-    # print("")
-    #
-    # while True:
-    #     data = "\n".join(lines[start: end])
-    #     new = content_manager._fixup_divs(data)
-    #     print(f"iter: {idx} start: {start} end: {end}")
-    #     if new.find('content-wrapper') == -1:
-    #         print(f"success")
-    #         break
-    #     diff = end - start
-    #     start = start + diff//increment
-    #     end = end - diff//increment
-    #     idx += 1
-    # start -= 1
-    # end += 1
-    # while True:
-    #     data = "\n".join(lines[start: end])
-    #     new = content_manager._fixup_divs(data)
-    #     print(f"iter: {idx} start: {start} end: {end}")
-    #     if new.find('content-wrapper') == -1:
-    #         print(f"success")
-    #         break
-    #     end -= 1
-    #     idx += 1
-    #
-    # print("\n".join(lines[start: end+10]))
-    #
+
+def test_fixup_toc_macro():
+    test_string = """
+<div class="toc-macro rbtoc1648571394609">
+
+- 1 [Introduction](#GeneralizedDataIngest-Introduction)
+- 2 [Background](#GeneralizedDataIngest-Background)
+- 3 [Proposal](#GeneralizedDataIngest-Proposal)
+- 4 [Architecture Diagram](#GeneralizedDataIngest-ArchitectureDiagram)
+- 5 [Supported Ingest
+Types](#GeneralizedDataIngest-SupportedIngestTypes)
+- 5.1 [Scheduled Job](#GeneralizedDataIngest-ScheduledJob)
+- 5.2 [On-Demand Copy](#GeneralizedDataIngest-On-DemandCopy)
+- 5.3 [SFTP Ingest](#GeneralizedDataIngest-SFTPIngest)
+- 6 [Ingest Bucket](#GeneralizedDataIngest-IngestBucket)
+- 7 [Migration](#GeneralizedDataIngest-Migration)
+- 8 [Change History](#GeneralizedDataIngest-ChangeHistory)
+
+</div>
+
+## Introduction
+
+This page contains a proposal for a generalized data ingest solution.
+"""
+    content = content_manager.fixup_toc_macro(test_string)
+    assert content.find('toc-macro') == -1
+    assert content.find('Change History') == -1
+    assert content.find('This page contains a proposal for a generalized data ingest solution.') != -1
+
+
+def test_fixup_expander():
+    test_string = """
+# Inference Environment Architecture Details
+
+<div class="contentLayout2">
+
+<div class="columnLayout single" layout="single">
+
+<div class="cell normal" data-type="normal">
+
+<div class="innerCell">
+
+# Overview
+
+## High Level Description
+
+<div id="expander-269883941" class="expand-container">
+
+<div id="expander-control-269883941" class="expand-control">
+
+<img src="/images/icons/grey_arrow_down.png" class="expand-control-image"
+style="vertical-align:middle;" />Click here for service description
+
+</div>
+
+<div id="expander-content-269883941" class="expand-content">
+
+The ML Platform Inference Environment provides a place to run multiple
+machine learning (ML)-based workloads. The ML models used in this
+environment are produced by data scientists working on production data
+in the Data Cleanroom.
+
+These models are exposed on the ML Platform as internal REST APIs that
+are consumable by other Proofpoint products to add ML capabilities into
+their current offerings.
+
+The ML Platform deploys workloads consumed by multiple business units
+across the entire company.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+"""
+    content = content_manager.fixup_expander(test_string)
+    assert content.find('expander-') == -1
+
+

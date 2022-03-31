@@ -45,6 +45,9 @@ setup(name=package,
             ],
       },
       entry_points = {
-            'console_scripts': ['con2jb=migcon.con2jb:main'],
+            'console_scripts': [
+                  'con2jb=migcon.con2jb:main',
+                  'hutil=migcon.heading_utility:main',
+            ],
       }
 )
