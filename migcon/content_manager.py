@@ -4,10 +4,10 @@ import re
 import shutil
 
 from anytree import Node, PreOrderIter
-from markdownify import markdownify as md
 from migcon.attachment import AttachmentInfo, Attachment, handle_attachment
 from migcon.div_fixups import fixup_divs
 from migcon.file_processor import process_files, process_dest_files
+from migcon.link_and_table_handler import convert_remaining_html as html_convert
 from pathlib import Path
 from typing import Dict
 
@@ -206,31 +206,12 @@ def convert_remaining_html(tree: Node) -> None:
     Fixup the div tags in the markdown files.
     :param tree: the content root node
     """
-    for node in PreOrderIter(tree):
-        file = get_dest_file_from_node(node)
-        with file.open(mode='r+') as input_file:
+    def do_it(dest_file: Path) -> None:
+        with dest_file.open(mode='r+') as input_file:
             data = input_file.read()
-        new = _convert_remaining_html(data)
+        new = html_convert(data)
         if new != data:
-            with file.open(mode='w') as output_file:
+            with dest_file.open(mode='w') as output_file:
                 output_file.write(new)
 
-def _convert_remaining_html(content: str) -> str:
-    strip_newline = False
-    def _convert_to_md(match):
-        converted = md(match.group(1))
-        if strip_newline:
-            converted = converted.replace('\n', '')
-        return converted
-
-    flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
-
-    strip_newline = True
-    html_link = r'(<a\s*?href.*?</a>)'
-    content = re.sub(html_link, _convert_to_md, content, 0, flags)
-
-    strip_newline = False
-    html_table = r'(<table.*?</table>)'
-    content = re.sub(html_table, _convert_to_md, content, 0, flags)
-
-    return content
+    process_dest_files(tree, do_it)

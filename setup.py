@@ -36,7 +36,6 @@ setup(name=package,
       platforms=["Windows", "Linux", "Mac OS-X"],
       install_requires=[
             'anytree>=2.8.0',
-            'markdown_it_py>=1.1.0',
             'pyyaml>=6.0',
             'markdwonify>=0.10.3',
       ],
