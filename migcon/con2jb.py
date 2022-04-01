@@ -1,8 +1,9 @@
 import argparse
 
 from pathlib import Path
-from migcon.content_manager import copy_into_dir_tree, rewrite_links, process_attachments, remove_trailing_sections, \
+from migcon.content_manager import copy_into_dir_tree, rewrite_links, remove_trailing_sections, \
     fixup_attachment_references, fixup_div_tags, convert_remaining_html
+from migcon.attachment import process_attachments
 from migcon.content_tree import build_content_tree, generate_replacement_dictionary
 from migcon.toc_generator import JupyterBookTOCGenerator
 
