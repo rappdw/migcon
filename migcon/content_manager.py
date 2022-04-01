@@ -144,13 +144,13 @@ def process_attachments(source: Path, tree: Node) -> Dict[Path, AttachmentInfo]:
     attachment_dir = tree.filepath / 'attachments'
     attachment_dir.mkdir(exist_ok=True)
     attachments = get_attached_files(tree)
-    for new_file, attachment_info in attachments.items():
+    for parent_page, attachment_info in attachments.items():
         files_copied = 0
         files_skipped = 0
         page_dir = attachment_dir / attachment_info.page_name
         page_dir.mkdir(exist_ok=True)
         for meaningful_name, attachment in attachment_info.attachments.items():
-            copied, skipped = copy_attachment(source, page_dir, attachment, meaningful_name)
+            copied, skipped = copy_attachment(source, page_dir, attachment, meaningful_name, parent_page)
             files_copied += copied
             files_skipped += skipped
         # after copying all attachments, ensure that the same number of files appear in the source and target
@@ -167,13 +167,15 @@ def process_attachments(source: Path, tree: Node) -> Dict[Path, AttachmentInfo]:
     return attachments
 
 
-def copy_attachment(source: Path, page_dir: Path, attachment: Attachment, meaningful_name: str) -> Tuple[int, int]:
+def copy_attachment(source: Path, page_dir: Path, attachment: Attachment, meaningful_name: str, parent_page: Path)\
+        -> Tuple[int, int]:
     """
     Copy the attachment to the attachment directory.
     :param source: the source directory
     :param page_dir: the directory to copy the attachment to
     :param attachment: the attachment_obj that holds the attachments to copy
     :param meaningful_name: the name of the attachment
+    :param parent_page: the page that the attachment is attached to
     :return: Tuple of (# of files copied, # of files skipped)
     """
     files = []
@@ -189,7 +191,11 @@ def copy_attachment(source: Path, page_dir: Path, attachment: Attachment, meanin
     files_skipped = 0
     for source_file, skipped_files in deduped_files.items():
         files_skipped += len(skipped_files)
-        dest_file = page_dir / f'{meaningful_name}'
+        if is_drawio:
+            # drawio files are placed in the same directory as the parent page
+            dest_file = parent_page.parent / f'{meaningful_name}'
+        else:
+            dest_file = page_dir / f'{meaningful_name}'
         if idx > 0:
             dest_file = dest_file.parent / f'{dest_file.stem}_{idx}{dest_file.suffix}'
         if dest_file.exists():
