@@ -3,15 +3,13 @@ import filecmp
 import re
 import shutil
 
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, List, Tuple
-
 from anytree import Node
-
+from dataclasses import dataclass
 from migcon.drawio_handler import copy_drawio_file
 from migcon.file_dups import find_duplicates
 from migcon.file_processor import process_dest_files
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 
 @dataclass

@@ -7,6 +7,7 @@ from anytree import Node, PreOrderIter
 from migcon.attachment import AttachmentInfo, Attachment, handle_attachment
 from migcon.div_fixups import fixup_divs
 from migcon.file_processor import process_files, process_dest_files
+from migcon.heading_info import HeadingInfo
 from migcon.link_and_table_handler import convert_remaining_html as html_convert
 from pathlib import Path
 from typing import Dict
@@ -210,6 +211,24 @@ def convert_remaining_html(tree: Node) -> None:
         with dest_file.open(mode='r+') as input_file:
             data = input_file.read()
         new = html_convert(data)
+        if new != data:
+            with dest_file.open(mode='w') as output_file:
+                output_file.write(new)
+
+    process_dest_files(tree, do_it)
+
+
+def reconcile_heading_levels(tree: Node) -> None:
+    """
+    The heading levels exported from confluence sometimes are not consistent, e.g. skipping levels, etc.
+    Go through a file line by line and fix up the heading levels
+    :param tree: the content root node
+    :return: None
+    """
+    def do_it(dest_file: Path) -> None:
+        with dest_file.open(mode='r+') as input_file:
+            data = input_file.read()
+        new = HeadingInfo.reconcile_heading_levels_in_file(data, dest_file)
         if new != data:
             with dest_file.open(mode='w') as output_file:
                 output_file.write(new)
