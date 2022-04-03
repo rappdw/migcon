@@ -60,3 +60,24 @@ def test_heading_levels_case2():
     results = HeadingInfo.reconcile_heading_levels_in_file(test_string, Path("test"))
     assert results == expected_results
 
+
+# def test_incorrect_fixup():
+#     test_string = """# Release Readiness
+#
+# ## \## Approvals
+#
+# <a
+# href="https://ml-platform-docs-engineering.reserolabs.science/inference/getting-started/release-readiness.html"
+# rel="nofollow">https://ml-platform-docs-engineering.reserolabs.science/inference/getting-started/release-readiness.html</a>
+#
+#
+#
+# ## \## Load Testing
+#
+# <a
+# href="https://ml-platform-docs-engineering.reserolabs.science/inference/reference/app-testing.html#load-testing"
+# rel="nofollow">https://ml-platform-docs-engineering.reserolabs.science/inference/reference/app-testing.html#load-testing</a>
+#
+# """
+#     results = HeadingInfo.reconcile_heading_levels_in_file(test_string, Path("test"))
+#     print(results)

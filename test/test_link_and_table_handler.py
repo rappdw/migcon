@@ -117,3 +117,19 @@ adding the user to the Clean Room Project Personnel table. |
     assert len(result.split('\n')) == 7
     assert result == expected_result
 
+
+def test_fix_missing_heading():
+    test_string = """
+| This is a test | second column | third column | The longest test column |
+| 1 | 2 | 3 | 4 |
+| 1 | 2 | 3 | 4 |
+"""
+
+    expected_result = """| | | | |
+| --- | --- | --- | --- |
+| This is a test | second column | third column | The longest test column |
+| 1 | 2 | 3 | 4 |
+| 1 | 2 | 3 | 4 |"""
+
+    result = migcon.link_and_table_handler.fixup_table_md(test_string)
+    assert result == expected_result

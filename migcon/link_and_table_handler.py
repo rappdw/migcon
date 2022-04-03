@@ -22,7 +22,7 @@ def get_table_row_case(line: str) -> int:
 
 
 def fixup_table_md(content: str) -> str:
-    lines = content.split('\n')
+    lines = content.strip().split('\n')
     output = []
     for line in lines:
         line = line.strip()
@@ -47,6 +47,18 @@ def fixup_table_md(content: str) -> str:
             elif line_case == 5:
                 # we have a closing pipe, append it to the last element of output
                 output[-1] += ' ' + line
+
+    # if the second line contains anything other than '|', ' ' or '-', then we need to add a header row
+    if len(output) > 1:
+        if len(set(output[1]) - set('| -')) > 0:
+            columns = output[0].count('|')
+            header0 = '|'
+            header1 = '|'
+            for i in range(columns - 1):
+                header0 += ' |'
+                header1 += ' --- |'
+            output.insert(0, header1)
+            output.insert(0, header0)
 
     return "\n".join(output)
 
