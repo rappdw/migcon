@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name=package,
-      version="1.2.0",
+      version="1.2.1",
       description='Utilities to migrate Confluence export to Sphinx, Juypter Book, etc.',
       long_description=long_description,
       long_description_content_type="text/markdown",
@@ -35,7 +35,7 @@ setup(name=package,
       install_requires=[
             'anytree>=2.8.0',
             'pyyaml>=6.0',
-            'markdwonify>=0.10.3',
+            'markdownify>=0.10.3',
       ],
       extras_require={
             'dev': [
