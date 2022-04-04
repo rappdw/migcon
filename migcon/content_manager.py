@@ -160,7 +160,8 @@ def fixup_attachment_references(tree: Node, attachments: Dict[Path, AttachmentIn
                     shutil.copyfile(source_root_dir.parent.parent / source_root_dir.name / img_file,
                                     target_root_dir / target_img_file)
                     return f'![{img_path.stem}](/{target_img_file})'
-                print(f'Warning: Could not find attachment file {img_file} for page {self.current_file}')
+                print(f'Warning: Could not find attachment file {img_file} for page {self.current_file}. COPY FROM EXPORT SOURCE!!!!')
+                return f'![MISSING_IMAGE_FILE: {Path(img_file).name}](/{img_file})'
 
     fixup = Fixup(attachments)
 
