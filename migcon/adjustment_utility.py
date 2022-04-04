@@ -87,6 +87,8 @@ def main():
         execute_replacement(source, target)
     elif args.function == "check":
         check_replacements(source, target)
+    else:
+        print("No function specified. Specify either execute or check")
 
 
 if __name__ == '__main__':

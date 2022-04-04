@@ -15,12 +15,14 @@ def get_dest_file_from_node(node: Node) -> Path:
 
 def process_files(source_root: Path, structure: Node, processor: Callable[[Path, Path], None]) -> None:
     for node in PreOrderIter(structure):
-        dest_file = get_dest_file_from_node(node)
-        src_rile = Path(source_root, dest_file.name)
-        processor(src_rile, dest_file)
+        if node.parent:
+            dest_file = get_dest_file_from_node(node)
+            src_file = Path(source_root, f"{node.name}.md")
+            processor(src_file, dest_file)
 
 
 def process_dest_files(structure: Node, processor: Callable[[Path], None]) -> None:
     for node in PreOrderIter(structure):
-        dest_file = get_dest_file_from_node(node)
-        processor(dest_file)
+        if node.parent:
+            dest_file = get_dest_file_from_node(node)
+            processor(dest_file)

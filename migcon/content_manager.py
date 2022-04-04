@@ -13,16 +13,6 @@ from pathlib import Path
 from typing import Dict
 
 
-def get_dest_file_from_node(node: Node) -> Path:
-    if node.parent:
-        filename = f"{node.filepath.name}.md"
-        dest_dir = node.parent.filepath
-    else:
-        filename = f"{node.name}.md"
-        dest_dir = node.filepath
-    return Path(dest_dir, filename)
-
-
 def copy_into_dir_tree(src_dir: Path, structure: Node) -> None:
     """
     Copies the source file into the new directory structure (provided by structure argument)
@@ -174,8 +164,7 @@ def fixup_attachment_references(tree: Node, attachments: Dict[Path, AttachmentIn
 
     fixup = Fixup(attachments)
 
-    for node in PreOrderIter(tree):
-        file = get_dest_file_from_node(node)
+    def doit(file: Path):
         fixup.prep_file(file)
         with file.open(mode='r+') as input_file:
             data = input_file.read()
@@ -184,6 +173,8 @@ def fixup_attachment_references(tree: Node, attachments: Dict[Path, AttachmentIn
         if fixup.changed:
             with file.open(mode='w') as output_file:
                 output_file.write(new)
+
+    process_dest_files(tree, doit)
 
 
 def fixup_div_tags(tree: Node) -> None:
