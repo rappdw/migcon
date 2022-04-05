@@ -31,13 +31,12 @@ class HeadingInfo:
         """
         if level == 1:
             self.level_1_count += 1
-            if self.level_1_count == 2:
-                # we've hit the second level 1... any levels that have been corrected up to this point
-                # should be ok. From here on out, we need to adjust up one level, so iterate through
-                # the level map and add 1 to each level. Also bump the next level up by 1
-                for k in self.level_map.keys():
-                    self.level_map[k] += 1
-                self.next_level += 1
+            if self.level_1_count > 1:
+                # we've hit another level 1... reset state
+                self.level_map = {
+                    1: 2
+                }
+                self.next_level = 3
         elif level not in self.level_map:
             self.level_map[level] = self.next_level
             self.next_level += 1
@@ -55,13 +54,10 @@ class HeadingInfo:
         heading_info = HeadingInfo(data, file)
 
         lines = data.splitlines()
-        new_lines = []
-
-        for line in lines:
-            if line.startswith('#'):
-                level = line.count('#')
-                new_level = heading_info.get_corrected_level(level)
-                new_lines.append(f'{"#" * new_level}{line[level:]}')
-            else:
-                new_lines.append(line)
-        return '\n'.join(new_lines) + '\n'
+        lines_to_examine = [(idx, line) for idx, line in enumerate(lines) if line.startswith("#")]
+        for idx, line in lines_to_examine:
+            level = line.count('#')
+            new_level = heading_info.get_corrected_level(level)
+            if level != new_level:
+                lines[idx] = '#' * new_level + ' ' + line.lstrip('#').lstrip()
+        return '\n'.join(lines) + '\n'

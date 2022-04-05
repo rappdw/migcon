@@ -33,7 +33,7 @@ def main():
     # 11. Reconcile heading levels
 
     tree = build_content_tree(source, target)                           # 1.
-    replacements = generate_replacement_dictionary(tree)                # 2.
+    replacements = generate_replacement_dictionary(tree, target)        # 2.
     JupyterBookTOCGenerator().generate(tree)                            # 3.
     copy_into_dir_tree(source, tree)                                    # 4.
     attachment_info = process_attachments(source, tree)                 # 5.

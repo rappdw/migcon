@@ -61,6 +61,59 @@ def test_heading_levels_case2():
     assert results == expected_results
 
 
+def test_regression_non_consecutive_headers():
+    test_string = """# MP5. ML Platform Shared Responsibility Model
+# Introduction
+# Background
+### Shared Responsibility
+### Operational Model
+### Well-Architected Framework
+# Shared Responsibilities
+## Operational Excellence
+### Platform Responsibilities
+### Application Responsibilities
+## Security
+### Platform Responsibilities
+### Application Responsibilities
+## Reliability
+### Platform Responsibilities
+### Application Responsibilities
+## Performance
+### Platform Responsibilities
+### Application Responsibilities
+## Cost Optimization and Sustainability
+### Platform Responsibilities
+### Application Responsibilities
+## Attachments:
+"""
+
+    expected_results = """# MP5. ML Platform Shared Responsibility Model
+## Introduction
+## Background
+### Shared Responsibility
+### Operational Model
+### Well-Architected Framework
+## Shared Responsibilities
+### Operational Excellence
+#### Platform Responsibilities
+#### Application Responsibilities
+### Security
+#### Platform Responsibilities
+#### Application Responsibilities
+### Reliability
+#### Platform Responsibilities
+#### Application Responsibilities
+### Performance
+#### Platform Responsibilities
+#### Application Responsibilities
+### Cost Optimization and Sustainability
+#### Platform Responsibilities
+#### Application Responsibilities
+### Attachments:
+"""
+    assert HeadingInfo.reconcile_heading_levels_in_file(test_string, Path("test")) == expected_results
+
+
 # def test_incorrect_fixup():
 #     test_string = """# Release Readiness
 #

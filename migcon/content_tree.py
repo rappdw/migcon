@@ -14,6 +14,7 @@ def format_node_name(name: str) -> str:
     name = re.sub(r'MP\d\._', '', name)
     name = re.sub(r'ML_Platform_', '', name)
     name = re.sub(r'_-_Playbooks', '', name)
+    name = re.sub(r'_-_Policies', '', name)
     return name
 
 
@@ -87,7 +88,7 @@ def print_tree(root: Node):
         print(f"{pre}{node.name}")
 
 
-def generate_replacement_dictionary(doc_tree: Node) -> Dict[str, str]:
+def generate_replacement_dictionary(doc_tree: Node, target_root_dir: Path) -> Dict[str, str]:
     """
     Generate a dictionary that maps flat file to structure file
     :param doc_tree: page hierarchy root node
@@ -96,5 +97,5 @@ def generate_replacement_dictionary(doc_tree: Node) -> Dict[str, str]:
     mapping_dictionary = {}
     for node in PreOrderIter(doc_tree):
         if node.parent:
-            mapping_dictionary[node.name] = node.filepath
+            mapping_dictionary[node.name] = Path(node.filepath).relative_to(target_root_dir)
     return mapping_dictionary

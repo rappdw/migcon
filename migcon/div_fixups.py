@@ -40,6 +40,7 @@ def fixup_divs(content: str) -> str:
         r'<div>\s*(.*?)\s*</div>',
         r'<div class="details">\s*(.*?)\s*</div>',
         r'<div class="appfire-gviz-div".*?>\s*(.*?)\s*</div>',
+        r'<div class="plugin_pagetree">\s*(.*?)\s*</div>',
     ]
     flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
     content = fixup_expander(content, flags)
